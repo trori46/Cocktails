@@ -1,0 +1,6 @@
+module Dip {
+  umbrella header "Dip-umbrella.h"
+
+  export *
+  module * { export * }
+}
