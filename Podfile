@@ -7,6 +7,7 @@ def pods
   pod 'RxSwift'
   pod 'Alamofire'
   pod 'SwiftyJSON'
+  pod 'AlamofireImage'
 end
 
 target 'Cocktails' do

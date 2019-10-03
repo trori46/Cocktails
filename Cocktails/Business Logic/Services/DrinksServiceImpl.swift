@@ -21,8 +21,8 @@ final class DrinksServiceImpl {
 
 extension DrinksServiceImpl: DrinksService {
 
-    func drink(by: String) -> Single<Api.Drink.Details> {
-        let parameters = ["i": by]
+    func drink(by id: String) -> Single<Api.Drink.Details> {
+        let parameters = ["i": id]
         let endpoint = Endpoint(path: "lookup.php", method: .get,
                                 parameters: parameters)
         return client.data(endpoint).map { try JSONDecoder().decode(Api.Drink.Details.self, from: $0) }

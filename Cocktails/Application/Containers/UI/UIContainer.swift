@@ -34,6 +34,7 @@ extension DependencyContainer {
     
     static func ui() -> DependencyContainer {
         let container = DependencyContainer()
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
         container.register { () -> RootViewController in
             let controller = UIStoryboard.main.instantiateViewController() as RootViewController
@@ -48,7 +49,10 @@ extension DependencyContainer {
         container.register { (category: Category) -> CocktailsViewController in
             let controller = UIStoryboard.main.instantiateViewController() as CocktailsViewController
             controller.category = category
-            controller.service = try container.resolve()
+            let presenter = CocktailsPresenter(context: context,
+                                               service: try container.resolve())
+            controller.output = presenter
+            presenter.output = controller
             
             return controller
         }

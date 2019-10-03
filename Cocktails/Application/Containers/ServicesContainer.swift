@@ -24,10 +24,13 @@ extension DependencyContainer {
     
     static func services() -> DependencyContainer {
         let container = DependencyContainer()
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+
         
         container.register(.singleton) { () -> DrinksService in
             let service = DrinksServiceImpl(client: try container.resolve())
-            return service
+            let cacheService = CachedDrinksService(service: service, context: context)
+            return cacheService
         }
         return container
     }
