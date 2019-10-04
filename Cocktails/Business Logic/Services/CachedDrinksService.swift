@@ -41,22 +41,12 @@ extension CachedDrinksService: DrinksService {
 extension CachedDrinksService {
     
     private func update(_ drinks: [Api.Drink], category: Category) throws {
-        //
-        //        _ = try drinks.filter { $0.id != nil }
-        //            .map { try drink(id: $0.id!) }
-        //            .map { deleteDrink($0) }
-        //
         drinks.forEach {
             try? update($0, category: category)
         }
     }
     
     private func update(_ drinks: [Api.Drink.Details]) throws {
-        
-        //        _ = try drinks.filter { $0.id != nil }
-        //            .map { try drink(id: $0.id!) }
-        //            .map { deleteDrink($0) }
-        
         drinks.forEach {
             try? update($0)
         }
@@ -64,7 +54,7 @@ extension CachedDrinksService {
     
     private func update(_ model: Api.Drink, category: Category) throws {
         if let id = model.id {
-            let cocktail = try drink(id: id) ?? NSEntityDescription.insertNewObject(forEntityName: Cocktail.entity().name!, into: context) as! Cocktail
+            let cocktail = try drink(id: id) ?? Cocktail(context: context)
             cocktail.update(with: model, category: category)
             
             try? context.save()
@@ -73,7 +63,7 @@ extension CachedDrinksService {
     
     private func update(_ model: Api.Drink.Details) throws {
         if let id = model.id {
-            let cocktail = try drink(id: id) ?? NSEntityDescription.insertNewObject(forEntityName: Cocktail.entity().name!, into: context) as! Cocktail
+            let cocktail = try drink(id: id) ?? Cocktail(context: context)
             cocktail.update(with: model)
             
             try? context.save()
@@ -85,11 +75,5 @@ extension CachedDrinksService {
         request.predicate = NSPredicate(format: "id = %@", id)
         return try? context.fetch(request).first
         
-    }
-    
-    func deleteDrink(_ drink: Cocktail?) {
-        guard let drink = drink else { return }
-        context.delete(drink)
-        try? context.save()
     }
 }

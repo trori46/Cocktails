@@ -9,5 +9,13 @@
 import Foundation
 
 protocol CocktailViewOutput {
-    func update()
+    
+    func updateData(with: String)
+    func observe(with: String)
 }
+
+protocol CocktailViewInput: class {
+    
+    func didUpdate(_ controller: CocktailsFetchController)
+}
+

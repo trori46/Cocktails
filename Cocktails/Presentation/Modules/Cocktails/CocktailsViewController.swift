@@ -10,10 +10,12 @@ import UIKit
 import RxSwift
 import CoreData
 
-final class CocktailsViewController: UITableViewController {
+final class CocktailsViewController: BaseViewController {
     
+    @IBOutlet weak var collectionView: UICollectionView!
     var category: Category!
-    var viewModels: [Api.Drink] = []
+    
+    private var blockOperations: [BlockOperation] = []
     
     var controller: NSFetchedResultsController<Cocktail>? {
         willSet {
@@ -22,25 +24,23 @@ final class CocktailsViewController: UITableViewController {
     }
     var output: CocktailsViewOutput!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        collectionView.refreshControl = UIRefreshControl()
+        collectionView.refreshControl?.addTarget(self, action: #selector(updateData), for: .valueChanged)
+        collectionView.refreshControl?.beginRefreshing()
+        updateData()
+    }
+    
+    @objc func updateData() {
         output.observe(with: category)
-
-        tableView.tableFooterView = UIView(frame: .zero)
         output.updateData(with: category)
     }
     
-    
-    func image(from string: String?) -> UIImage? {
-        guard string != nil else { return nil }
-        guard let url = URL(string: string!) else { return nil }
-        guard let data = try? Data(contentsOf: url) else { return nil }
-        return UIImage(data: data)
-    }
-    
-    func presentCocktail(with: String) {
-        
+    func presentCocktail(with id: String) {
+        let controller = assembly.ui.cocktail(with: id)
+        navigationController?.pushViewController(controller, animated: true)
     }
 }
 
@@ -50,37 +50,41 @@ extension CocktailsViewController: CocktailsViewInput {
         self.controller = controller
         do {
             try controller.performFetch()
+            
+            if controller.fetchedObjects?.count == 0 {
+                configureEmptyState()
+            }
         } catch {
-            fatalError("Failed to fetch entities: \(error)")
+            configure(with: error)
         }
-        tableView.reloadData()
+        collectionView.reloadData()
     }
 }
 
-extension CocktailsViewController {
+extension CocktailsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let sections = controller?.sections else { return 0 }
         let sectionInfo = sections[section]
         return sectionInfo.numberOfObjects
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath) as UITableViewCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        collectionView.refreshControl?.endRefreshing()
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CocktailsCell
         guard let viewModel = controller?.object(at: indexPath) else {
-            fatalError("Failed to fetch entities")
+            configure(with: "Failed to fetch entities")
+            return cell
         }
+        cell.configure(with: viewModel)
         
-    
-        cell.textLabel?.text = viewModel.name
-        
-        cell.imageView?.set(from: viewModel.image ?? "")
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let viewModel = controller?.object(at: indexPath) else {
-            fatalError("Failed to fetch entities")
+            configure(with: "Failed to fetch entities")
+            return
         }
         presentCocktail(with: viewModel.id!)
     }
@@ -89,26 +93,33 @@ extension CocktailsViewController {
 extension CocktailsViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
+        blockOperations.removeAll(keepingCapacity: false)
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
+        collectionView.performBatchUpdates({
+            self.blockOperations.forEach { $0.start() }
+        }, completion: { _ in
+            self.blockOperations.removeAll(keepingCapacity: false)
+        })
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        var block: BlockOperation = BlockOperation()
+        
         switch (type) {
         case .insert:
-            tableView?.insertRows(at: [newIndexPath!], with: .none)
+            block = BlockOperation { self.collectionView?.insertItems(at: [newIndexPath!]) }
         case .delete:
-            tableView?.deleteRows(at: [indexPath!], with: .fade)
+            block = BlockOperation { self.collectionView?.deleteItems(at: [indexPath!]) }
         case .update:
-            tableView?.reloadRows(at: [indexPath!], with: .automatic)
+            block = BlockOperation { self.collectionView?.reloadItems(at: [indexPath!]) }
         case .move:
-            tableView?.deleteRows(at: [indexPath!], with: .fade)
-            tableView?.insertRows(at: [newIndexPath!], with: .none)
+            block = BlockOperation { self.collectionView?.deleteItems(at: [indexPath!])
+                self.collectionView?.insertItems(at: [newIndexPath!]) }
         @unknown default:
             break
         }
+        blockOperations.append(block)
     }
 }

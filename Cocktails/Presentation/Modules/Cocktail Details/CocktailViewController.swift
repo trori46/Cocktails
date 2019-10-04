@@ -9,15 +9,94 @@
 import UIKit
 import CoreData
 
-final class CocktailViewController: UITableViewController {
-  
+typealias ViewModels = [ViewModel]
+
+final class CocktailViewController: BaseViewController {
+    
+    @IBOutlet weak var tableView: UITableView!
+    var output: CocktailViewOutput!
+    var id: String!
+    
+    var controller: NSFetchedResultsController<Cocktail>? {
+        willSet {
+            newValue?.delegate = self
+        }
+    }
+    var viewModels: ViewModels = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.tableFooterView = .init(frame: .zero)
+        output.observe(with: id)
+        output.updateData(with: id)
+    }
+    
+    func configure() {
+        if controller?.fetchedObjects?.count == 0 {
+            configureEmptyState()
+        }
         
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.tableFooterView = UIView(frame: .zero)
+        viewModels = controller?.fetchedObjects?.first.map(ViewModel.get) ?? []
+        tableView.reloadData()
     }
 }
 
+extension CocktailViewController: CocktailViewInput {
+    
+    func didUpdate(_ controller: CocktailsFetchController) {
+        self.controller = controller
+        do {
+            try controller.performFetch()
+            configure()
+        } catch {
+            configure(with: error)
+        }
+        
+    }
+}
 
+extension CocktailViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        configure()
+    }
+}
+
+extension CocktailViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModels.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let viewModel = viewModels[indexPath.row]
+        
+        switch viewModel {
+        case .image(let value):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ImageTableCell") as! ImageTableCell
+            cell.configure(with: value)
+            return cell
+        case .title(let value):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableCell") as! TextTableCell
+            cell.configure(with: value)
+            return cell
+        case .tags(let value):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TagsTableCell") as! TextTableCell
+            cell.configure(with: value)
+            return cell
+        case .recipe(let value):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeTableCell") as! TextTableCell
+            cell.configure(with: value)
+            return cell
+        case .instructions(let value):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsTableCell") as! IngredientsTableCell
+            cell.configure(with: value)
+            return cell
+        }
+    }
+}

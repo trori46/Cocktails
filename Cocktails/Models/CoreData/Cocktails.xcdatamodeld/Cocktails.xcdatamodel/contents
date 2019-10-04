@@ -6,8 +6,8 @@
         <attribute name="glass" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="image" optional="YES" attributeType="String"/>
-        <attribute name="instructions" optional="YES" attributeType="Transformable"/>
-        <attribute name="measures" optional="YES" attributeType="Transformable"/>
+        <attribute name="ingredients" optional="YES" attributeType="Transformable" customClassName=".[String]"/>
+        <attribute name="measures" optional="YES" attributeType="Transformable" customClassName=".[String]"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="recipe" optional="YES" attributeType="String"/>
         <attribute name="tags" optional="YES" attributeType="String"/>

@@ -14,7 +14,7 @@ final class CategoriesViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tableView.tableFooterView = .init(frame: .zero)
     }
     
     func presentCocktails(with category: Category) {

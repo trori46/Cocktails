@@ -25,7 +25,7 @@ extension DrinksServiceImpl: DrinksService {
         let parameters = ["i": id]
         let endpoint = Endpoint(path: "lookup.php", method: .get,
                                 parameters: parameters)
-        return client.data(endpoint).map { try JSONDecoder().decode(Api.Drink.Details.self, from: $0) }
+        return client.data(endpoint).map { try JSONDecoder().decode(Api.DetailsList.self, from: $0) }.map { $0.details.first! }
     }
     
     

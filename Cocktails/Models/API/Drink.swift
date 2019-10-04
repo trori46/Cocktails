@@ -81,10 +81,10 @@ struct Api {
                 thumb = try? container.decode(String.self, forKey: .thumb)
 
                 ingredients = Drink.Details.ingredientsRange.compactMap {
-                    try? indexContainer.decode(String.self, forKey: .init(stringLiteral: "ingredient\($0)"))
+                    try? indexContainer.decode(String.self, forKey: .init(stringLiteral: "strIngredient\($0)"))
                 }
                 measures = Drink.Details.ingredientsRange.compactMap {
-                    try? indexContainer.decode(String.self, forKey: .init(stringLiteral: "measure\($0)"))
+                    try? indexContainer.decode(String.self, forKey: .init(stringLiteral: "strMeasure\($0)"))
                 }
             }
         }

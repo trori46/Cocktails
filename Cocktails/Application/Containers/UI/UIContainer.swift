@@ -13,6 +13,8 @@ protocol UIContainer {
     func root() -> UIViewController
     func categories() -> UIViewController
     func cocktails(with: Category) -> UIViewController
+    func cocktail(with: String) -> UIViewController
+
 }
 
 extension DependencyContainer: UIContainer {
@@ -27,6 +29,10 @@ extension DependencyContainer: UIContainer {
     
     func cocktails(with category: Category) -> UIViewController {
         return try! resolve(arguments: category) as CocktailsViewController
+    }
+    
+    func cocktail(with id: String) -> UIViewController {
+        return try! resolve(arguments: id) as CocktailViewController
     }
 }
 
@@ -43,14 +49,30 @@ extension DependencyContainer {
         
         container.register { () -> CategoriesViewController in
             let controller = UIStoryboard.main.instantiateViewController() as CategoriesViewController
+            controller.navigationController?.navigationItem.largeTitleDisplayMode = .never
             return controller
         }
         
         container.register { (category: Category) -> CocktailsViewController in
             let controller = UIStoryboard.main.instantiateViewController() as CocktailsViewController
             controller.category = category
+            controller.navigationController?.navigationItem.largeTitleDisplayMode = .never
+
             let presenter = CocktailsPresenter(context: context,
                                                service: try container.resolve())
+            controller.output = presenter
+            presenter.output = controller
+            
+            return controller
+        }
+        
+        container.register { (id: String) -> CocktailViewController in
+            let controller = UIStoryboard.main.instantiateViewController() as CocktailViewController
+            controller.navigationItem.largeTitleDisplayMode = .never
+
+            controller.navigationController?.navigationBar.barTintColor = .white
+            controller.id = id
+            let presenter = CocktailPresenter(service: try container.resolve(), context: context)
             controller.output = presenter
             presenter.output = controller
             

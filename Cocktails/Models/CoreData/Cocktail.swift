@@ -19,9 +19,10 @@ final class Cocktail: NSManagedObject {
     @NSManaged var image: String?
     @NSManaged var recipe: String?
 
-    @NSManaged var ingredients: [String]
-    @NSManaged var measures: [String]
+    @NSManaged var ingredients: [String]?
+    @NSManaged var measures: [String]?
     
+    var instructions: [String: String]?
     
     func update(with model: Api.Drink, category: Category) {
         self.id = model.id
@@ -38,8 +39,10 @@ final class Cocktail: NSManagedObject {
         self.alcoholic = model.alcoholic
         self.glass = model.glass
         self.recipe = model.recipe
-        self.ingredients = model.ingredients ?? []
-        self.measures = model.measures ?? []
+        self.measures = model.measures
+        self.ingredients = model.ingredients
+        
+        instructions = Dictionary(keys: ingredients!, values: measures!)
         self.image = model.thumb
     }
 }
