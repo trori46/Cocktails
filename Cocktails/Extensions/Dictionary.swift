@@ -16,7 +16,7 @@ extension Dictionary where Value == String {
         var newValues = values
         if div > 0 {
             (1...div).forEach {_ in
-                newValues.append("")
+                newValues.append("Measure by eye")
             }
         }
         

@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F5EDBB7234CC3FE006FA2C6 /* MosaicViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5EDBB6234CC3FE006FA2C6 /* MosaicViewLayout.swift */; };
 		7859AF892344DB5B002DDFB7 /* DrinksService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7859AF882344DB5B002DDFB7 /* DrinksService.swift */; };
 		7859AF8B2344DEA5002DDFB7 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7859AF8A2344DEA5002DDFB7 /* UIViewController.swift */; };
 		7859AF8E2344DF15002DDFB7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7859AF8D2344DF15002DDFB7 /* SceneDelegate.swift */; };
@@ -60,6 +61,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F5EDBB6234CC3FE006FA2C6 /* MosaicViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MosaicViewLayout.swift; sourceTree = "<group>"; };
 		71F4B78D3FB8DFCA6EC9F262 /* libPods-Cocktails.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Cocktails.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7859AF882344DB5B002DDFB7 /* DrinksService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinksService.swift; sourceTree = "<group>"; };
 		7859AF8A2344DEA5002DDFB7 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
@@ -301,6 +303,7 @@
 			children = (
 				78E1A8102344D41100F9F1E9 /* Modules */,
 				7859C66B2344D0CD00B5A1BB /* Storyboards */,
+				4F5EDBB6234CC3FE006FA2C6 /* MosaicViewLayout.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -492,6 +495,7 @@
 			files = (
 				7859AF9B2344E668002DDFB7 /* Endpoint.swift in Sources */,
 				7859AFBE23463089002DDFB7 /* CocktailsCell.swift in Sources */,
+				4F5EDBB7234CC3FE006FA2C6 /* MosaicViewLayout.swift in Sources */,
 				7859AFB5234618EA002DDFB7 /* CocktailProtocols.swift in Sources */,
 				7859C63B2344CAA200B5A1BB /* AppDelegate.swift in Sources */,
 				7859AFB223461801002DDFB7 /* CocktailViewController.swift in Sources */,

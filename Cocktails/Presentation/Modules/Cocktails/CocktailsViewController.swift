@@ -27,6 +27,11 @@ final class CocktailsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let layout = collectionView.collectionViewLayout as! MosaicViewLayout
+        layout.cellPadding = 5
+        layout.numberOfColumns = 2
+        layout.delegate = self
+        
         collectionView.refreshControl = UIRefreshControl()
         collectionView.refreshControl?.addTarget(self, action: #selector(updateData), for: .valueChanged)
         collectionView.refreshControl?.beginRefreshing()
@@ -76,7 +81,9 @@ extension CocktailsViewController: UICollectionViewDelegate, UICollectionViewDat
             configure(with: "Failed to fetch entities")
             return cell
         }
+        print("fsdfsf", cell.frame)
         cell.configure(with: viewModel)
+        //collectionView.collectionViewLayout.invalidateLayout()
         
         return cell
     }
@@ -87,6 +94,19 @@ extension CocktailsViewController: UICollectionViewDelegate, UICollectionViewDat
             return
         }
         presentCocktail(with: viewModel.id!)
+    }
+    
+}
+
+extension CocktailsViewController: MosaicLayoutDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, heightForImageAtIndexPath indexPath: IndexPath, withWidth width: CGFloat) -> CGFloat {
+        let random = Int.random(in: 1 ..< 4)
+        return CGFloat(random * 100)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, heightForDescriptionAtIndexPath indexPath: IndexPath, withWidth width: CGFloat) -> CGFloat {
+      return 60
     }
 }
 
