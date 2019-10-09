@@ -81,9 +81,7 @@ extension CocktailsViewController: UICollectionViewDelegate, UICollectionViewDat
             configure(with: "Failed to fetch entities")
             return cell
         }
-        print("fsdfsf", cell.frame)
         cell.configure(with: viewModel)
-        //collectionView.collectionViewLayout.invalidateLayout()
         
         return cell
     }

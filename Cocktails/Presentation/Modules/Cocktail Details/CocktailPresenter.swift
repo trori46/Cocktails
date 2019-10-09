@@ -25,9 +25,6 @@ extension CocktailPresenter: CocktailViewOutput {
 
     func updateData(with: String) {
         _ = service.drink(by: with)
-            .do(onSuccess: {
-                print($0)
-            })
         .subscribe()
     }
     
