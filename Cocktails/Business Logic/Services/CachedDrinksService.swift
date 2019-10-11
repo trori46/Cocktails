@@ -37,7 +37,6 @@ extension CachedDrinksService: DrinksService {
     }
 }
 
-
 extension CachedDrinksService {
     
     private func update(_ drinks: [Api.Drink], category: Category) throws {
@@ -70,10 +69,9 @@ extension CachedDrinksService {
         }
     }
     
-    func drink(id: String) throws -> Cocktail? {
+    private func drink(id: String) throws -> Cocktail? {
         let request = NSFetchRequest<Cocktail>(entityName: Cocktail.entity().name!)
         request.predicate = NSPredicate(format: "id = %@", id)
         return try? context.fetch(request).first
-        
     }
 }

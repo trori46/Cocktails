@@ -30,7 +30,7 @@ extension CategoriesViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: CellsIdentifiers.tableCell, for: indexPath) as UITableViewCell
         cell.textLabel?.text = viewModels[indexPath.row].rawValue
         return cell
     }

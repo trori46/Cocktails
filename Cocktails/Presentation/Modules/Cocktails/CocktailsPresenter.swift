@@ -44,4 +44,3 @@ extension CocktailsPresenter: CocktailsViewOutput {
         output?.didUpdate(controller)
     }
 }
-

@@ -8,13 +8,11 @@
 
 import RxSwift
 import Alamofire
-import SwiftyJSON
 
 typealias Parameters = Alamofire.Parameters
 typealias HTTPMethod = Alamofire.HTTPMethod
 typealias HTTPHeaders = Alamofire.HTTPHeaders
 typealias ParameterEncoding = Alamofire.ParameterEncoding
-typealias JSON = SwiftyJSON.JSON
 
 protocol APIClient {
     

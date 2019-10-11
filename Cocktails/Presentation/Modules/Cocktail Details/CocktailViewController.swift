@@ -22,6 +22,7 @@ final class CocktailViewController: BaseViewController {
             newValue?.delegate = self
         }
     }
+    
     var viewModels: ViewModels = [] {
         didSet {
             tableView.reloadData()
@@ -55,7 +56,6 @@ extension CocktailViewController: CocktailViewInput {
         } catch {
             configure(with: error)
         }
-        
     }
 }
 
@@ -78,23 +78,23 @@ extension CocktailViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch viewModel {
         case .image(let value):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ImageTableCell") as! ImageTableCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: CellsIdentifiers.imageTableCell) as! ImageTableCell
             cell.configure(with: value)
             return cell
         case .title(let value):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableCell") as! TextTableCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: CellsIdentifiers.titleTableCell) as! TextTableCell
             cell.configure(with: value)
             return cell
         case .tags(let value):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TagsTableCell") as! TextTableCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: CellsIdentifiers.tagsTableCell) as! TextTableCell
             cell.configure(with: value)
             return cell
         case .recipe(let value):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeTableCell") as! TextTableCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: CellsIdentifiers.recipeTableCell) as! TextTableCell
             cell.configure(with: value)
             return cell
         case .instructions(let value):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsTableCell") as! IngredientsTableCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: CellsIdentifiers.ingredientsTableCell) as! IngredientsTableCell
             cell.configure(with: value)
             return cell
         }

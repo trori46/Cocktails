@@ -46,5 +46,3 @@ final class Cocktail: NSManagedObject {
         self.image = model.thumb
     }
 }
-
-
