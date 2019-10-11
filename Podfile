@@ -6,7 +6,6 @@ def pods
   pod 'Dip'
   pod 'RxSwift'
   pod 'Alamofire'
-  pod 'SwiftyJSON'
   pod 'AlamofireImage'
 end
 

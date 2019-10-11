@@ -22,6 +22,7 @@ final class CocktailsViewController: BaseViewController {
             newValue?.delegate = self
         }
     }
+    
     var output: CocktailsViewOutput!
     
     override func viewDidLoad() {
@@ -34,11 +35,11 @@ final class CocktailsViewController: BaseViewController {
         
         collectionView.refreshControl = UIRefreshControl()
         collectionView.refreshControl?.addTarget(self, action: #selector(updateData), for: .valueChanged)
-        collectionView.refreshControl?.beginRefreshing()
         updateData()
     }
     
     @objc func updateData() {
+        collectionView.refreshControl?.beginRefreshing()
         output.observe(with: category)
         output.updateData(with: category)
     }
@@ -62,6 +63,8 @@ extension CocktailsViewController: CocktailsViewInput {
         } catch {
             configure(with: error)
         }
+        
+        collectionView.refreshControl?.endRefreshing()
         collectionView.reloadData()
     }
 }
@@ -75,15 +78,12 @@ extension CocktailsViewController: UICollectionViewDelegate, UICollectionViewDat
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        collectionView.refreshControl?.endRefreshing()
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CocktailsCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellsIdentifiers.cell, for: indexPath) as! CocktailsCell
         guard let viewModel = controller?.object(at: indexPath) else {
             configure(with: "Failed to fetch entities")
             return cell
         }
-        print("fsdfsf", cell.frame)
         cell.configure(with: viewModel)
-        //collectionView.collectionViewLayout.invalidateLayout()
         
         return cell
     }
@@ -95,7 +95,6 @@ extension CocktailsViewController: UICollectionViewDelegate, UICollectionViewDat
         }
         presentCocktail(with: viewModel.id!)
     }
-    
 }
 
 extension CocktailsViewController: MosaicLayoutDelegate {

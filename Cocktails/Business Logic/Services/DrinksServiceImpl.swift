@@ -28,7 +28,6 @@ extension DrinksServiceImpl: DrinksService {
         return client.data(endpoint).map { try JSONDecoder().decode(Api.DetailsList.self, from: $0) }.map { $0.details.first! }
     }
     
-    
     func drinks(with category: Category) -> Single<[Api.Drink]> {
         let parameters = ["c": category.rawValue]
         let endpoint = Endpoint(path: "filter.php", method: .get,

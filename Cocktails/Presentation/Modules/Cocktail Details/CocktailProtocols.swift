@@ -18,4 +18,3 @@ protocol CocktailViewInput: class {
     
     func didUpdate(_ controller: CocktailsFetchController)
 }
-

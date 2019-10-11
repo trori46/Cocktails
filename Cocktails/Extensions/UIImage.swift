@@ -14,9 +14,7 @@ extension UIImageView {
     func set(from string: String) {
         let url = URL(string: string)!
         let placeholderImage = UIImage(named: "placeholder")!
-        print(self.frame)
-       // let filter = AspectScaledToFillSizeFilter(size: self.frame.size)
+
         self.af_setImage(withURL: url, placeholderImage: placeholderImage)
-            //, filter: filter)
     }
 }

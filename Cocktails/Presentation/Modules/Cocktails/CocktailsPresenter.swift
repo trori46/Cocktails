@@ -29,8 +29,6 @@ extension CocktailsPresenter: CocktailsViewOutput {
     
     func updateData(with category: Category) {
         _ = service.drinks(with: category)
-            .do(onSuccess: { print($0)
-            })
             .subscribe()
     }
     
@@ -46,4 +44,3 @@ extension CocktailsPresenter: CocktailsViewOutput {
         output?.didUpdate(controller)
     }
 }
-
